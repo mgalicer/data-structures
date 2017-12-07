@@ -21,8 +21,11 @@ public class CollisionsData<T extends Comparable<T>> {
 		myAVLTree.add(17);
 		myAVLTree.add(2);
 		myAVLTree.add(20);
-		myAVLTree.add(21);
-		
+//		myAVLTree.add(21);
+//		myAVLTree.add(22);
+//		myAVLTree.add(9);
+//		myAVLTree.add(8);
+//		myAVLTree.add(23);
 		System.out.println(myAVLTree.toStringTreeFormat());
 	}
 
@@ -45,9 +48,10 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * 
 	 * @return
 	 */
-	public boolean isBalanced(Node<T> left, Node<T> right) {
-		if(Math.abs(left.getHeight() - right.getHeight()) > 1) return false;
-		return true;
+	public int balanceFactor(Node<T> node) {
+		if(node.right == null) return node.height;
+		if(node.left == null) return node.height;
+		return node.right.height - node.left.height;
 	}
 	
 	/**
@@ -233,7 +237,7 @@ public class CollisionsData<T extends Comparable<T>> {
 				spaces += "|--";
 			}
 			output.append(spaces);
-			output.append(tree.data + " (" + tree.height + ")");
+			output.append(tree.data + " (" + tree.height + ")" + "-" + balanceFactor(tree) );
 			preOrderPrint(tree.left, level + 1, output);
 			preOrderPrint(tree.right , level + 1, output);
 		}
