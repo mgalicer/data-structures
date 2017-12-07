@@ -14,19 +14,28 @@ public class CollisionsData<T extends Comparable<T>> {
 		CollisionsData<Integer> myAVLTree = new CollisionsData<Integer>();
 		myAVLTree.add(5);
 		myAVLTree.add(3);
-		myAVLTree.add(10);
 		myAVLTree.add(4);
-		
-		
-		myAVLTree.add(17);
-		myAVLTree.add(2);
-		myAVLTree.add(20);
+		System.out.println(myAVLTree.toStringTreeFormat());
+		myAVLTree.add(10);
+		myAVLTree.add(11);
+		myAVLTree.add(12);
+		System.out.println(myAVLTree.toStringTreeFormat());
+
+
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
+//		myAVLTree.add();
 //		myAVLTree.add(21);
 //		myAVLTree.add(22);
 //		myAVLTree.add(9);
 //		myAVLTree.add(8);
 //		myAVLTree.add(23);
-		System.out.println(myAVLTree.toStringTreeFormat());
+
 	}
 
 	// root of the tree
@@ -51,7 +60,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	public int balanceFactor(Node<T> node) {
 		if(node.right == null) return node.height;
 		if(node.left == null) return node.height;
-		return node.right.height - node.left.height;
+		return Math.abs(node.right.height - node.left.height);
 	}
 	
 	/**
@@ -95,12 +104,95 @@ public class CollisionsData<T extends Comparable<T>> {
 		}
 		if (node.data.compareTo(item) > 0) {
 			node.left = add(node.left, item);
+			if(balanceFactor(node) > 1) {
+				return rebalance(node);
+			}
 		} else if (node.data.compareTo(item) < 0) {
 			node.right = add(node.right, item);
+			if(balanceFactor(node) > 1) {
+				return rebalance(node);
+			}
 		}
+		
 		updateHeight(node);
+
+		
 		return node;
 		
+	}
+	
+	private Node<T> rebalance(Node<T> node) {
+		
+		// left subtree is imbalanced		
+		if(node.left == null) {
+			// perform LL rotation
+			if(node.right.left == null) {
+				return balanceRR(node);
+			// perform LR rotation	
+			} else { 
+				return balanceRL(node); 
+			}
+			
+		// right subtree is imbalanced		
+		} else {
+			if(node.left.right == null) {
+				return balanceLL(node);
+			} else {
+				return balanceLR(node);
+			}
+		}
+	}
+	
+	private Node<T> balanceLL(Node<T> A) {
+		Node<T> B = A.left;
+		A.left = B.right;
+		B.right = A;
+		
+		updateHeight(A);
+		updateHeight(B);
+		
+		return B;
+	}
+	
+	private Node<T> balanceRR(Node<T> node) {
+		Node<T> B = node.right;
+		
+		node.right = B.left; 
+		B.left = node;
+		
+		updateHeight(node);
+		updateHeight(B);
+		return B;
+	}
+	
+	private Node<T> balanceLR(Node<T> A) {
+		Node<T> B = A.left;
+		Node<T> C = B.right;
+		A.left = C.right;
+		B.right = C.left;
+		C.left = B;
+		C.right = A;
+		
+		updateHeight(A);
+		updateHeight(B);
+		updateHeight(C);
+		
+		return C;
+	}
+	
+	private Node<T> balanceRL(Node<T> A) {
+		Node<T> B = A.right;
+		Node<T> C = B.left;
+		A.right = C.left;
+		B.left = C.right;
+		C.right = B;
+		C.left = A;
+		
+		updateHeight(A);
+		updateHeight(B);
+		updateHeight(C);
+		
+		return C;
 	}
 
 	/**
