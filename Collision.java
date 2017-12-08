@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 /**
  * represents a single collision (single valid row from the input file)
- *  single parameter to this constructor should be an ArrayList<String> 
+ * single parameter to this constructor should be an ArrayList<String> 
+ * implements comparable interface 
  * @author marigalicer
  *
  */
 
-//[03/13/2017, 21:00, BROOKLYN, 11223, 40.59985, -73.9613, (40.59985, -73.9613), , , 2337 CONEY
-//ISLAND AVENUE , 0, 0, 0, 0, 0, 0, 0, 0, Driver Inattention/Distraction, Unspecified, , , ,
-//3631843, SPORT UTILITY / STATION WAGON, PASSENGER VEHICLE, , ]
 
 public class Collision implements Comparable<Collision>{
 
@@ -20,10 +18,9 @@ public class Collision implements Comparable<Collision>{
 	String key;
 	int personsInjured, personsKilled, pedestriansInjured, pedestriansKilled, cyclistsInjured, cyclistsKilled, motoristsInjured, motoristsKilled;
 
-	public static void main(String[] args) {
 
-	}
 	/**
+	 * Constructor that validates input.
 	 * the date cannot be empty and has to represent a valid Date object (see below)
 	 * the zip code has to be a five character string with digits as all of its characters
 	 * the number of persons/pedestrians/cyclists/motorists injured/killed has to be a non-negative integer
@@ -40,6 +37,7 @@ public class Collision implements Comparable<Collision>{
 		date = new Date(entries.get(0));
 		// validate zip code		
 		if(validateZip(entries.get(3))) zip = entries.get(3);
+		
 		// validate num of people involved		
 		personsInjured = validateNum(entries.get(10));
 		personsKilled = validateNum(entries.get(11));
@@ -49,6 +47,7 @@ public class Collision implements Comparable<Collision>{
 		cyclistsKilled = validateNum(entries.get(15));
 		motoristsInjured = validateNum(entries.get(16));
 		motoristsKilled = validateNum(entries.get(17));
+		
 		// validate key
 		if(validateKey(entries.get(23))) key = entries.get(23); 
 		
@@ -58,7 +57,7 @@ public class Collision implements Comparable<Collision>{
 	/**
 	 * Validates the zipcode entered by the user.
 	 * @param userZip
-	 * @return
+	 * @return boolean if it works
 	 */
 	public static boolean validateZip(String userZip) throws IllegalArgumentException {
 		if(userZip.length() != 5) throw new IllegalArgumentException("Must be valid zip code.");
@@ -69,7 +68,7 @@ public class Collision implements Comparable<Collision>{
 	}
 	
 	/**
-	 * 
+	 * @param entry, part of the Array passed in to the constructor
 	 */
 	public static int validateNum(String entry) throws IllegalArgumentException {
 		if(Integer.parseInt(entry) < 0) throw new IllegalArgumentException("Number of people must be greater than or equal to zero."); 
@@ -77,6 +76,7 @@ public class Collision implements Comparable<Collision>{
 	}
 	
 	/**
+	 * Validates key.
 	 * @param key
 	 */
 	public static boolean validateKey(String key) throws IllegalArgumentException {
@@ -88,7 +88,7 @@ public class Collision implements Comparable<Collision>{
 	 * if two zip codes are different, then the comparison is based on the
 	 * zip codes alone. If they are the same, then the comparison is based on the dates. If the date are the same, then the comparison is based
 	 * on the unique keys
-	 * @param o 
+	 * @param o Collision object
 	 */
 	@Override
 	public int compareTo(Collision o) {
@@ -101,7 +101,8 @@ public class Collision implements Comparable<Collision>{
 	}
 	
 	/**
-	 * 
+	 * Checks for equality of objects.
+	 * @param o, object to compare
 	 */
 	@Override
 	public boolean equals(Object o) {
@@ -109,6 +110,7 @@ public class Collision implements Comparable<Collision>{
 		return false;
 	}
 	
+	//getter methods	
 	public String getZip() { return zip; }
 	
 	public Date getDate() { return date; }
