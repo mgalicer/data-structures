@@ -1,45 +1,19 @@
 package project5;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //import project5.BST_Recursive.Node;
 /**
  * 
  * @author Mari Galicer, some methods written by Joanna Klukowska
  *
- * @param Collision, the data that is stored in nodes of the tree; needs to
- *            implement Comparable<T> interface
+ * @param Collision, the data that is stored in nodes of the tree
  */
-public class CollisionsData<T extends Comparable<T>> {
+public class CollisionsData {
 	
-	public static void main(String[] args) {
-		CollisionsData<Integer> myAVLTree = new CollisionsData<Integer>();
-		myAVLTree.add(5);
-		myAVLTree.add(3);
-		myAVLTree.add(4);
-		System.out.println(myAVLTree.toStringTreeFormat());
-		myAVLTree.add(10);
-		myAVLTree.add(11);
-		myAVLTree.add(12);
-		System.out.println(myAVLTree.toStringTreeFormat());
-
-
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add();
-//		myAVLTree.add(21);
-//		myAVLTree.add(22);
-//		myAVLTree.add(9);
-//		myAVLTree.add(8);
-//		myAVLTree.add(23);
-
-	}
-
 	// root of the tree
-	protected Node<T> root;
+	protected Node root;
 	// current number of nodes in the tree
 	protected int numOfElements;
 	//helper variable used by the remove methods 
@@ -54,10 +28,57 @@ public class CollisionsData<T extends Comparable<T>> {
 	}
 	
 	/**
+	 * Returns a report that specifies the important collision info for the specified zip code.
+	 * @param zip
+	 * @param dateBegin
+	 * @param dateEnd
+	 * @return String
+	 */
+	public String getReport(String zip, Date dateBegin, Date dateEnd) {
+		int[] injuries = new int[10];
+		find(this.root, zip, dateBegin, dateEnd, injuries);
+		String header = "Motor Vehicle Collisions for zipcode " + zip + " (" + dateBegin.toString() + " - " + dateEnd.toString() + ")\n";
+		String divider = "====================================================================\n";
+		int numFatalities = injuries[0] + injuries[1] + injuries[2];
+		int numInjuries = injuries[3] + injuries[4] + injuries[5];
+		int total = injuries[6];
+				
+		return header + divider + "Total number of collisions: " + total + "\nNumber of fatalities: " + numFatalities + "\npedestrians: " 
+		+ injuries[0] + "\ncyclists: " + injuries[1] + "\nmotorists: " + injuries[2] + "\nNumber of injuries: " + numInjuries + "\npedestrians: " 
+				+ injuries[3] + "\ncyclists: " + injuries[4] + "\nmotorists: " + injuries[5] + "\n";
+	}
+	
+	private void find(Node node, String zip, Date dateBegin, Date dateEnd, int[] injuries) {
+		if(node == null) {
+			return; 
+		} else if(node.data.getZip().compareTo(zip) < 0) {
+			// go right			
+			find(node.right, zip, dateBegin, dateEnd, injuries);
+		} else if(node.data.getZip().compareTo(zip) > 0){
+			// go left
+			find(node.left, zip, dateBegin, dateEnd, injuries);
+		} else {
+			//	zip equals zip at node, check if in date range
+			if(node.data.date.compareTo(dateBegin) >= 0 && node.data.date.compareTo(dateEnd) <= 0) {
+				injuries[0] += node.data.getPedestriansKilled();
+				injuries[1] += node.data.getCyclistKilled();
+				injuries[2] += node.data.getMotoristsKilled();
+				injuries[3] += node.data.getPedestriansInjured();
+				injuries[4] += node.data.getCyclistsInjured();
+				injuries[5] += node.data.getMotoristsInjured();
+				injuries[6] += 1;
+			}
+			find(node.left, zip, dateBegin, dateEnd, injuries);
+			find(node.right, zip, dateBegin, dateEnd, injuries);
+		}
+	}
+	
+	
+	/**
 	 * 
 	 * @return
 	 */
-	public int balanceFactor(Node<T> node) {
+	public int balanceFactor(Node node) {
 		if(node.right == null) return node.height;
 		if(node.left == null) return node.height;
 		return Math.abs(node.right.height - node.left.height);
@@ -67,7 +88,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * Updates the height of the node passed in.
 	 * @param node whose height you want to update
 	 */
-	private void updateHeight(Node<T> node) {
+	private void updateHeight(Node node) {
 		if(node.left == null && node.right == null) {
 			node.height = 0;
 		} else if(node.left == null) {
@@ -86,7 +107,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * 
 	 * @param item the new element to be added to the tree
 	 */
-	public void add(T item) {
+	public void add(Collision item) {
 		if (item == null)
 			return;
 		root = add (root, item);
@@ -97,45 +118,45 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * 
 	 * @param item the new element to be added to the tree
 	 */
-	private Node<T> add(Node<T> node, T item) {
+	private Node add(Node node, Collision item) {
 		if (node == null) { 
 			numOfElements++;
-			return new Node<T>(item);
+			return new Node(item);
 		}
 		if (node.data.compareTo(item) > 0) {
 			node.left = add(node.left, item);
-			if(balanceFactor(node) > 1) {
-				return rebalance(node);
-			}
 		} else if (node.data.compareTo(item) < 0) {
 			node.right = add(node.right, item);
-			if(balanceFactor(node) > 1) {
-				return rebalance(node);
-			}
-		}
+		} else {};
 		
 		updateHeight(node);
-
+		if(balanceFactor(node) > 1) {
+			return rebalance(node);
+		}
 		
 		return node;
 		
 	}
 	
-	private Node<T> rebalance(Node<T> node) {
-		
-		// left subtree is imbalanced		
-		if(node.left == null) {
-			// perform LL rotation
-			if(node.right.left == null) {
+	private int height(Node node) {
+		if(node == null) return -1;
+		return node.height;
+	}
+	
+	private Node rebalance(Node node) {
+				
+		if(height(node.right) > height(node.left)) {
+			// perform RR rotation
+			if(height(node.right.right) > height(node.right.left)) {
 				return balanceRR(node);
-			// perform LR rotation	
+			// perform RL rotation	
 			} else { 
 				return balanceRL(node); 
 			}
 			
-		// right subtree is imbalanced		
+	
 		} else {
-			if(node.left.right == null) {
+			if(height(node.left.left) > height(node.left.right)) {
 				return balanceLL(node);
 			} else {
 				return balanceLR(node);
@@ -143,8 +164,8 @@ public class CollisionsData<T extends Comparable<T>> {
 		}
 	}
 	
-	private Node<T> balanceLL(Node<T> A) {
-		Node<T> B = A.left;
+	private Node balanceLL(Node A) {
+		Node B = A.left;
 		A.left = B.right;
 		B.right = A;
 		
@@ -154,8 +175,8 @@ public class CollisionsData<T extends Comparable<T>> {
 		return B;
 	}
 	
-	private Node<T> balanceRR(Node<T> node) {
-		Node<T> B = node.right;
+	private Node balanceRR(Node node) {
+		Node B = node.right;
 		
 		node.right = B.left; 
 		B.left = node;
@@ -165,9 +186,9 @@ public class CollisionsData<T extends Comparable<T>> {
 		return B;
 	}
 	
-	private Node<T> balanceLR(Node<T> A) {
-		Node<T> B = A.left;
-		Node<T> C = B.right;
+	private Node balanceLR(Node A) {
+		Node B = A.left;
+		Node C = B.right;
 		A.left = C.right;
 		B.right = C.left;
 		C.left = B;
@@ -180,9 +201,9 @@ public class CollisionsData<T extends Comparable<T>> {
 		return C;
 	}
 	
-	private Node<T> balanceRL(Node<T> A) {
-		Node<T> B = A.right;
-		Node<T> C = B.left;
+	private Node balanceRL(Node A) {
+		Node B = A.right;
+		Node C = B.left;
 		A.right = C.left;
 		B.left = C.right;
 		C.right = B;
@@ -201,7 +222,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * 
 	 * @param target the item to be removed from this tree 
 	 */
-	public boolean remove(T target)
+	public boolean remove(Collision target)
 	{
 		root = recRemove(target, root);
 		return found;
@@ -212,8 +233,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * 
 	 * @param target the item to be removed from this tree 
 	 */
-	private Node<T> recRemove(T target, Node<T> node)
-	{
+	private Node recRemove(Collision target, Node node) {
 		if (node == null)
 			found = false;
 		else if (target.compareTo(node.data) < 0)
@@ -224,6 +244,7 @@ public class CollisionsData<T extends Comparable<T>> {
 			node = removeNode(node);
 			found = true;
 		}
+		
 		return node;
 	}
 	
@@ -233,9 +254,9 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * @param target the item to be removed from this tree 
 	 * @return a reference to the node itself, or to the modified subtree 
 	 */
-	private Node<T> removeNode(Node<T> node)
+	private Node removeNode(Node node)
 	{
-		T data;
+		Collision data;
 		if (node.left == null)
 			return node.right ;
 		else if (node.right  == null)
@@ -244,6 +265,12 @@ public class CollisionsData<T extends Comparable<T>> {
 			data = getPredecessor(node.left);
 			node.data = data;
 			node.left = recRemove(data, node.left);
+			
+			updateHeight(node);
+			if(balanceFactor(node) > 1) {
+				return rebalance(node);
+			}
+			
 			return node;
 		}
 	}
@@ -254,10 +281,10 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * @param subtree root of the subtree within which to search for the rightmost node 
 	 * @return returns data stored in the rightmost node of subtree  
 	 */
-	private T getPredecessor(Node<T> subtree)
+	private Collision getPredecessor(Node subtree)
 	{
 		if (subtree==null) throw new NullPointerException("getPredecessor called with an empty subtree");
-		Node<T> temp = subtree;
+		Node temp = subtree;
 		while (temp.right  != null)
 			temp = temp.right ;
 		return temp.data;
@@ -290,7 +317,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * @param tree the root of the current subtree
 	 * @param s the string that accumulated the string representation of this BST
 	 */
-	private void inOrderPrint(Node<T> tree, StringBuilder s) {
+	private void inOrderPrint(Node tree, StringBuilder s) {
 		if (tree != null) {
 			inOrderPrint(tree.left, s);
 			s.append(tree.data.toString() + "  ");
@@ -320,7 +347,7 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * @param output the string that accumulated the string representation of this
 	 *   BST
 	 */
-	private void preOrderPrint(Node<T> tree, int level, StringBuilder output) {
+	private void preOrderPrint(Node tree, int level, StringBuilder output) {
 		if (tree != null) {
 			String spaces = "\n";
 			if (level > 0) {
@@ -329,7 +356,7 @@ public class CollisionsData<T extends Comparable<T>> {
 				spaces += "|--";
 			}
 			output.append(spaces);
-			output.append(tree.data + " (" + tree.height + ")" + "-" + balanceFactor(tree) );
+			output.append(tree.data.getZip());
 			preOrderPrint(tree.left, level + 1, output);
 			preOrderPrint(tree.right , level + 1, output);
 		}
@@ -353,16 +380,13 @@ public class CollisionsData<T extends Comparable<T>> {
 	 * and references to left and right subtrees. 
 	 * 
 	 * @author Joanna Klukowska
-	 *
-	 * @param <T> a reference type that implements Comparable<T> interface 
 	 */
-	protected static class Node <T extends Comparable <T>> 
-						implements Comparable <Node <T> > {
+	protected static class Node {
 	
 		
-		protected Node <T> left;  //reference to the left subtree 
-		protected Node <T> right; //reference to the right subtree
-		protected T data;            //data item stored in the node
+		protected Node left;  //reference to the left subtree 
+		protected Node right; //reference to the right subtree
+		protected Collision data;            //data item stored in the node
 
 		protected int height; 
 		
@@ -374,7 +398,7 @@ public class CollisionsData<T extends Comparable<T>> {
 		 * @param data
 		 *    data to be stored in the node
 		 */
-		protected Node(T data) {
+		protected Node(Collision data) {
 			this.data = data;
 			left = null;
 			right = null;
@@ -393,8 +417,7 @@ public class CollisionsData<T extends Comparable<T>> {
 		/* (non-Javadoc)
 		 * @see java.lang.Comparable#compareTo(java.lang.Object)
 		 */
-		@Override
-		public int compareTo(Node<T> other) {
+		public int compareTo(Node other) {
 			return this.data.compareTo(other.data);
 		} 
 	
