@@ -1,6 +1,6 @@
 package project5;
 /**
- * 
+ * This class reads in a file of Collision data, reads in user input, and outputs a report based on the information they give.
  * @author marigalicer
  *
  */
@@ -33,16 +33,18 @@ public class CollisionInfo {
 	    Date endDate;
 	    Scanner userInput = new Scanner(System.in);
 	    while(true) {
+	    	// get zip	    	
 	    	do {
 		    	System.out.println("Enter a zip code (’quit’ to exit): ");
 		    	zip = userInput.nextLine();
 		    } while(!validateZip(zip));
-
+	    	
 		    System.out.println("Enter a start date (MM/DD/YYYY): ");
 		    String start = userInput.nextLine();
 		    System.out.println("Enter an end date (MM/DD/YYYY): ");
 		    String end = userInput.nextLine();
 		    
+		    // now get start and end date		    
 		    try {
 		    	startDate = new Date(start);
 		    	endDate = new Date(end);
@@ -59,15 +61,16 @@ public class CollisionInfo {
 	/**
 	 * Validates the zipcode entered by the user.
 	 * @param userZip
-	 * @return
+	 * @return boolean representing if zip is valid
 	 */
 	public static boolean validateZip(String userZip) {
-		
+		// check if the user has tried to exit		
 		if(userZip.equalsIgnoreCase("quit")) System.exit(0);
 		if(userZip.length() != 5) {
 			System.out.println("Invalid zip code. Try again.");
 			return false;
 		}
+		// figure out if all chars are valid integers 		
 		for(int i=0; i < userZip.length(); i++) {
 			if(!Character.isDigit(userZip.charAt(i))) {
 				System.out.println("Invalid zip code. Try again.");
@@ -89,7 +92,11 @@ public class CollisionInfo {
 		if(startDate.compareTo(endDate) >= 0) throw new IllegalArgumentException("Start date must be before end date!");
 	}
 	
-	
+	/**
+	 * Reads in CSV data, creates Collision objects, and then adds them to the AVL tree.
+	 * @param userFile
+	 * @param accidentData
+	 */
 	public static void readInCSVInput(File userFile, CollisionsData accidentData) {
 	    Scanner in = null;
 	   
@@ -113,7 +120,6 @@ public class CollisionInfo {
 	    	  }
 	    	  
 	      }
-	      System.out.println(accidentData.toStringTreeFormat());
 	      in.close();
 	    } catch (FileNotFoundException e) {
 	      System.err.print("Error: Cannot read file.");
