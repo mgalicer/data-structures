@@ -43,9 +43,15 @@ public class CollisionsData {
 		int numInjuries = injuries[3] + injuries[4] + injuries[5];
 		int total = injuries[6];
 				
-		return header + divider + "Total number of collisions: " + total + "\nNumber of fatalities: " + numFatalities + "\npedestrians: " 
-		+ injuries[0] + "\ncyclists: " + injuries[1] + "\nmotorists: " + injuries[2] + "\nNumber of injuries: " + numInjuries + "\npedestrians: " 
-				+ injuries[3] + "\ncyclists: " + injuries[4] + "\nmotorists: " + injuries[5] + "\n";
+		return header + divider + "Total number of collisions: " + total + "\n"
+				+ String.format("%28s","Number of fatalities: ") + numFatalities +"\n"
+				+ String.format("%28s","pedestrians: ") + injuries[0] + "\n"
+				+ String.format("%28s","cyclists: ") + injuries[1] + "\n"
+				+ String.format("%28s","motorists: ") + injuries[2] + "\n"
+				+ String.format("%28s","Number of injuries: ") + numInjuries + "\n" 
+				+ String.format("%28s","pedestrians: ") + injuries[3] + "\n"
+				+ String.format("%28s","cyclists: ") + injuries[4] + "\n"
+				+ String.format("%28s","motorists: ") + injuries[5] + "\n\n";
 	}
 	
 	private void find(Node node, String zip, Date dateBegin, Date dateEnd, int[] injuries) {
