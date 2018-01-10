@@ -54,6 +54,14 @@ public class CollisionsData {
 				+ String.format("%28s","motorists: ") + injuries[5] + "\n\n";
 	}
 	
+	/**
+	 * Finds the relevant data to add to the report and adds it to the injuries array.
+	 * @param node
+	 * @param zip
+	 * @param dateBegin
+	 * @param dateEnd
+	 * @param injuries
+	 */
 	private void find(Node node, String zip, Date dateBegin, Date dateEnd, int[] injuries) {
 		if(node == null) {
 			return; 
@@ -81,8 +89,8 @@ public class CollisionsData {
 	
 	
 	/**
-	 * 
-	 * @return
+	 * Calculates the balance factor for a given node.
+	 * @return int
 	 */
 	public int balanceFactor(Node node) {
 		if(node.right == null) return node.height;
@@ -149,8 +157,13 @@ public class CollisionsData {
 		return node.height;
 	}
 	
+	/**
+	 * After adding or removing, this method will perform the necessary rebalancing.
+	 * @param node
+	 * @return Node that is the new root
+	 */
 	private Node rebalance(Node node) {
-				
+		// check where imbalance is on the tree		
 		if(height(node.right) > height(node.left)) {
 			// perform RR rotation
 			if(height(node.right.right) > height(node.right.left)) {
@@ -160,7 +173,6 @@ public class CollisionsData {
 				return balanceRL(node); 
 			}
 			
-	
 		} else {
 			if(height(node.left.left) > height(node.left.right)) {
 				return balanceLL(node);
