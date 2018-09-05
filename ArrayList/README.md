@@ -1,5 +1,3 @@
-credit: Joanna Klukowska, Data Structures F'17
-
 # Color List Converter
  This is a tool for converting color values from their hexadecimal representation to the RGB and name equivalents.
 
@@ -18,3 +16,5 @@ from the command line:
 ```
 javac project1/*.java && java project1.ColorConverter color_list.txt
 ```
+
+credit: Joanna Klukowska, Data Structures F'17
