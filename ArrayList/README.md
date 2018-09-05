@@ -12,3 +12,9 @@ credit: Joanna Klukowska, Data Structures F'17
 * working with existing code
 * extending existing classes (inheritance)
 * using and understanding exception handling
+
+# Run this program
+from the command line:
+```
+javac project1/*.java && java project1.ColorConverter color_list.txt
+```
