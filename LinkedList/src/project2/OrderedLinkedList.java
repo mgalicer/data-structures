@@ -1,5 +1,5 @@
 package project2;
-
+@SuppressWarnings("unchecked")
 /**
   * This class represents a singly linked list implementation of OrderedList<E> interface.
   *
@@ -14,6 +14,17 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
     *
     * @param <E> the type of elements in each node
   **/
+
+  public static void main(String[] args) {
+    OrderedLinkedList<Integer> list = new OrderedLinkedList<Integer>();
+    list.add(2);
+    list.add(1);
+    list.add(4);
+    list.add(7);
+    list.add(5);
+    list.add(8);
+    System.out.println(list.toString());
+  }
 
   protected static class Node<E extends Comparable<E>> {
     private E element;
@@ -63,43 +74,45 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
      * @throws NullPointerException if the specified element is null
      */
   public boolean add(E e) {
-    if(e == null ) { throw new NullPointerException("Cannot add null to the linked list."); }
-    if(!(e instanceof Comparable)) { throw new ClassCastException("Element must implement Comparable interface."); }
+    if(e == null ) throw new NullPointerException("Cannot add null to the linked list.");
+    if(!(e instanceof Comparable)) throw new ClassCastException("Element must implement Comparable interface.");
 
-    // initialize current to the head of the list
+    // initialize current to the head of the list and create new node
     Node<E> current = head;
+    Node<E> newNode = new Node<>(e);
 
-    if(head == null) {
-      // create new node
-      head = new Node<>(e, current);
-      size++;
-      return true;
-
-    // if there's only one node in the list
-    } else if(current.getElement().compareTo(e) > 0) {
-      Node<E> newNode = new Node<>(e, current);
+    //if there aren't any elements, set the new node as the head
+    if(current == null) {
       head = newNode;
-      size++;
-      return true;
-
-    // if there are multiple elements, loop through
-    } else {
-      while(current.getNext() != null) {
-        if(current.getNext().getElement().compareTo(e) > 0) {
-          // create new node that points to
-          Node<E> newNode = new Node<>(e, current.getNext());
-          current.setNext(newNode);
-          // don't iterate through entire loop - return if inserted
-          size++;
-          return true;
-        }
-        current = current.getNext();
-      }
-      current.setNext(new Node<>(e));
       size++;
       return true;
     }
 
+    // check if element is new head
+    if(current.getElement().compareTo(e) > 0) {
+      newNode.setNext(current);
+      head = newNode;
+      size++;
+      return true;
+    }
+
+    while(current != null) {
+      // if new el < current
+      if(current.getElement().compareTo(e) > 0) {
+        newNode.setNext(current);
+        size++;
+        return true;
+      }
+      // if we've hit the last element in the list, add it to the end
+      if(current.getNext() == null) {
+        current.setNext(newNode);
+        size++;
+        return true;
+      }
+      current = current.getNext();
+    }
+
+    return true;
   }
 
   /**
