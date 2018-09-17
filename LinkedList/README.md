@@ -1,5 +1,5 @@
 # Color List Converter with a Linked List
-This project is similar to the Color List Converter in the ArrayList project (a tool for converting color values from their hexadecimal representation to the RGB and name equivalents) but this time the colors are stored in a linked list.
+This project converts a text file into a list of color objects that contain their color values in hexadecimal representation to the RGB and name equivalents. The list is an ordered linked list, implemented from the given OrderedList<E> interface.
 
 ### concepts
 *working with multi-file programs
