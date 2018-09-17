@@ -57,13 +57,11 @@ public class ColorConverter {
       Color userColor = funColors.getColorByHexValue(userInput);
 
       if(userColor != null) {
-        System.out.println("Color Information:");
-        System.out.println(userColor);
+        System.out.println("Color Information:\n" + userColor);
       } else {
         try {
           Color undefColor = new Color(userInput);
-          System.out.println("Color Information:");
-          System.out.println(undefColor);
+          System.out.println("Color Information:\n" + undefColor);
           // catch the exception if user puts in a weird value
         } catch(IllegalArgumentException e) {
           System.out.println("Error: This is not a valid color specification.");
