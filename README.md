@@ -1,7 +1,5 @@
-# data-structures
-Data Structure related projects.
-
-## ArrayList
-## LinkedList
-## Stack & Queue
-## AVL Tree
+# Data Structures Projects
+#### ArrayList
+#### LinkedList
+#### Stack & Queue
+#### AVL Tree
