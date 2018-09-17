@@ -1,2 +1,7 @@
 # data-structures
-Data Structure related projects that I've worked on in class or otherwise. 
+Data Structure related projects.
+
+## ArrayList
+## LinkedList
+## Stack & Queue
+## AVL Tree
