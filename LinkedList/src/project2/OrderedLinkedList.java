@@ -1,5 +1,5 @@
 package project2;
-@SuppressWarnings("unchecked")
+
 /**
   * This class represents a singly linked list implementation of OrderedList<E> interface.
   *
@@ -14,17 +14,6 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
     *
     * @param <E> the type of elements in each node
   **/
-
-  public static void main(String[] args) {
-    OrderedLinkedList<Integer> list = new OrderedLinkedList<Integer>();
-    list.add(2);
-    list.add(1);
-    list.add(4);
-    list.add(7);
-    list.add(5);
-    list.add(8);
-    System.out.println(list.toString());
-  }
 
   protected static class Node<E extends Comparable<E>> {
     private E element;
@@ -97,18 +86,21 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
     }
 
     while(current != null) {
-      // if new el < current
+      // if new el < current, add it to the list
       if(current.getElement().compareTo(e) > 0) {
         newNode.setNext(current);
         size++;
         return true;
       }
+
       // if we've hit the last element in the list, add it to the end
       if(current.getNext() == null) {
         current.setNext(newNode);
         size++;
         return true;
       }
+
+      // otherwise, keep going
       current = current.getNext();
     }
 
@@ -167,7 +159,7 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
     // if(!(o instanceof head.getElement())){ throw new ClassCastException("Object passed in must be compatible with type in list."); }
     Node<E> current = head;
     for(int i=0; i < size; i++) {
-      if(o.equals(current.getElement())) { return true; }
+      if(o.equals(current.getElement())) return true;
       current = current.getNext();
     }
 
@@ -256,9 +248,10 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
    */
 
   public E remove (int index) {
-    if(index < 0 || index >= size) { throw new IndexOutOfBoundsException("Index is out of bounds."); }
+    if(index < 0 || index >= size) throw new IndexOutOfBoundsException("Index is out of bounds.");
     Node<E> current = head;
     int i = 0;
+
     // if there is only one element in the list, return it
     if(index == 0) {
       if(current.getNext() == null) {
@@ -346,7 +339,7 @@ public class OrderedLinkedList<E extends Comparable<E>> implements OrderedList<E
    *
    * @return the number of elements in this list
    */
-  public int size() { return size; }
+  public int size() return size;
 
   /**
    * Returns a string representation of this list.  The string
