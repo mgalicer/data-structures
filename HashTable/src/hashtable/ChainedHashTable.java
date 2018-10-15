@@ -17,6 +17,10 @@ public class ChainedHashTable<K,V> {
         table[i] = new SeparateChainedList<K,V>();
   }
 
+  public boolean contains(K key) {
+    SeparateChainedList list = table[hash(key)];
+    return (get(key) != null);
+  }
 
   public V get(K key) {
     if(key == null) throw new IllegalArgumentException("Cannot get null value.");
@@ -66,9 +70,6 @@ public class ChainedHashTable<K,V> {
   public static void main(String[] args) {
     ChainedHashTable<String, Integer> cht = new ChainedHashTable<String, Integer>();
     cht.put("hello", 2);
-    System.out.println(cht);
-    cht.remove("hello");
-    System.out.println(cht);
 
   }
 
