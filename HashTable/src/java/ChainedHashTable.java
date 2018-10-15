@@ -17,11 +17,47 @@ public class ChainedHashTable<K,V> {
         table[i] = new SeparateChainedList<K,V>();
   }
 
+  public V get(K key) {
+    if(key == null) throw new IllegalArgumentException("Cannot get null value.");
+
+    SeparateChainedList list = table[hash(key)];
+    return list.get(key);
+  }
+
+  public int getSize() {
+    return size;
+  }
+
   private int hash(K key) {
     // get the hashcode from the variable's type
     int hc = key.hashCode() & 0x7fffffff;
     // convert that hashcode to fit into the hashtable's buckets
     return hc % buckets;
+  }
+
+  public boolean isEmpty() {
+    return size == 0;
+  }
+
+  public V put(K key, V value) {
+    if(key == null || value == null) throw new IllegalArgumentException("Cannot insert null value into hashtable.");
+
+    SeparateChainedList list = table[hash(key)];
+    return list.put(key, value);
+  }
+
+  public String toString() {
+     StringBuilder tableString = new StringBuilder();
+
+     for(int i = 0; i < buckets; i++) {
+      tableString.append(table[i].toString());
+     }
+
+     return tableString.toString();
+  }
+
+  public static void main(String[] args) {
+
   }
 
 }
